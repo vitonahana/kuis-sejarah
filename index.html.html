@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Penjelajah Sejarah Indonesia</title>
+<style>
+:root{--bg:#f6efe1;--card:#fffaf0;--ink:#2b1d14;--mute:#6f5b4b;--red:#b3261e;--gold:#c8901a;--ok:#2e7d32;--bad:#b3261e;--line:#e2d3b8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1410;--card:#2a1f18;--ink:#f5ead8;--mute:#bba892;--red:#e0584f;--gold:#e5ac3a;--ok:#66bb6a;--bad:#ef6b62;--line:#4a392c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1c1410;--card:#2a1f18;--ink:#f5ead8;--mute:#bba892;--red:#e0584f;--gold:#e5ac3a;--ok:#66bb6a;--bad:#ef6b62;--line:#4a392c;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Roboto,system-ui,sans-serif}
+body{background:var(--bg);display:flex;justify-content:center}
+.app{width:100%;max-width:560px;min-height:100vh;padding:20px 18px 32px;display:flex;flex-direction:column}
+.screen{display:none;flex:1;flex-direction:column;animation:in .3s ease}
+.screen.on{display:flex}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:2rem;line-height:1.15;margin:.3em 0}
+h2{font-family:Georgia,serif;margin:.2em 0 .5em}
+.hero{text-align:center;margin:auto 0;padding:10px 0}
+.emblem{width:96px;height:96px;margin:0 auto 12px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-size:3rem;border:4px solid var(--gold);box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.sub{color:var(--mute);margin:.4em 0 1.4em;line-height:1.5}
+.btn{appearance:none;border:0;border-radius:14px;padding:15px 18px;font:inherit;font-weight:600;font-size:1.05rem;cursor:pointer;background:var(--red);color:#fff;width:100%;min-height:52px;transition:transform .1s,filter .15s}
+.btn:hover{filter:brightness(1.08)}.btn:active{transform:scale(.98)}
+.btn.alt{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.btn:focus-visible,.opt:focus-visible,.era:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.era{display:flex;gap:14px;align-items:center;width:100%;text-align:left;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px;font:inherit;cursor:pointer;transition:border-color .15s,transform .1s}
+.era:hover{border-color:var(--gold)}.era:active{transform:scale(.98)}
+.era .ic{font-size:2rem}.era b{display:block;font-size:1.08rem}.era span{color:var(--mute);font-size:.9rem}
+.era .best{margin-left:auto;font-size:.8rem;color:var(--gold);font-weight:700;white-space:nowrap}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.bar{flex:1;height:10px;background:var(--line);border-radius:9px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--red));transition:width .4s}
+.chip{font-size:.85rem;font-weight:700;color:var(--mute)}
+.qcard{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:20px;margin-bottom:14px}
+.qcard p{margin:0;font-size:1.2rem;line-height:1.45;font-weight:600}
+.era-tag{font-size:.8rem;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;font:inherit;font-size:1.02rem;cursor:pointer;min-height:54px;transition:border-color .15s,background .15s}
+.opt:hover:not(:disabled){border-color:var(--gold)}
+.opt .k{flex:none;width:30px;height:30px;border-radius:50%;background:var(--line);display:grid;place-items:center;font-weight:700;font-size:.9rem}
+.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 18%,var(--card))}
+.opt.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 18%,var(--card))}
+.opt:disabled{cursor:default}
+.fb{display:none;background:var(--card);border-left:5px solid var(--gold);border-radius:10px;padding:12px 14px;margin:4px 0 14px;line-height:1.5;font-size:.97rem}
+.fb.on{display:block}
+.score{font-size:4rem;font-weight:800;color:var(--red);font-family:Georgia,serif;margin:0}
+.rank{display:inline-block;background:var(--gold);color:#2b1d14;font-weight:800;padding:6px 16px;border-radius:99px;margin:8px 0}
+.row{display:flex;gap:10px}.row .btn{flex:1}
+.about{background:var(--card);border:2px solid var(--line);border-radius:16px;padding:16px;line-height:1.55;font-size:.95rem;margin-bottom:12px}
+.about b{color:var(--red)}
+.back{background:none;border:0;color:var(--mute);font:inherit;cursor:pointer;padding:8px 0;align-self:flex-start}
+.spacer{flex:1}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- 1. WELCOME -->
+<section class="screen on" id="welcome">
+  <div class="hero">
+    <div class="emblem" aria-hidden="true">🏛️</div>
+    <h1>Penjelajah<br>Sejarah Indonesia</h1>
+    <p class="sub">Jelajahi perjalanan Nusantara dari era kerajaan, masa penjajahan, hingga kemerdekaan. Jawab dengan tepat, kumpulkan poin, dan raih gelar Penjelajah!</p>
+    <button class="btn" id="start">Mulai Menjelajah</button>
+  </div>
+</section>
+
+<!-- 2. MENU -->
+<section class="screen" id="menu">
+  <button class="back" data-go="welcome">← Kembali</button>
+  <h2>Pilih Petualanganmu</h2>
+  <div id="eras"></div>
+  <button class="btn alt" id="aboutBtn">ℹ️ Tentang Aplikasi</button>
+  <div class="about" id="about" hidden>
+    <b>Tujuan:</b> membantu pelajar dan masyarakat umum mengenal sejarah Indonesia lewat kuis yang singkat dan menyenangkan.<br><br>
+    <b>Persona:</b> Rani, 16 tahun, pelajar SMA. Ia suka belajar lewat HP, bosan dengan buku teks panjang, dan butuh umpan balik langsung supaya paham.<br><br>
+    <b>Cara main:</b> pilih era, jawab 4 pertanyaan, baca penjelasan tiap jawaban. Nilai terbaik tersimpan otomatis.
+  </div>
+</section>
+
+<!-- 3. INTERAKSI -->
+<section class="screen" id="quiz">
+  <div class="top">
+    <button class="back" id="quit" aria-label="Keluar">✕</button>
+    <div class="bar"><i id="prog"></i></div>
+    <div class="chip" id="count">1/4</div>
+    <div class="chip" id="pts">⭐ 0</div>
+  </div>
+  <div class="qcard"><div class="era-tag" id="etag"></div><p id="qtext"></p></div>
+  <div id="opts"></div>
+  <div class="fb" id="fb" role="status" aria-live="polite"></div>
+  <div class="spacer"></div>
+  <button class="btn" id="next" hidden>Lanjut →</button>
+</section>
+
+<!-- 4. HASIL -->
+<section class="screen" id="result">
+  <div class="hero">
+    <div class="emblem" aria-hidden="true" id="rem">🏆</div>
+    <p class="sub" style="margin:0">Skor kamu</p>
+    <p class="score" id="rscore">0</p>
+    <div class="rank" id="rrank"></div>
+    <p class="sub" id="rmsg"></p>
+    <div class="row"><button class="btn alt" id="again">Ulangi</button><button class="btn" id="tomenu">Menu</button></div>
+  </div>
+</section>
+
+</div>
+<script>
+(function(){
+var ERAS=[
+{id:"kerajaan",ic:"👑",name:"Era Kerajaan Nusantara",desc:"Kutai hingga Majapahit",qs:[
+["Kerajaan Hindu tertua di Indonesia, bukti sejarahnya berupa prasasti Yupa, adalah…",["Kutai","Sriwijaya","Majapahit","Mataram Kuno"],0,"Kutai di Kalimantan Timur (abad ke-4) dikenal lewat tujuh prasasti Yupa, dengan raja terkenalnya Mulawarman."],
+["Candi Borobudur dibangun pada masa pemerintahan dinasti…",["Sanjaya","Syailendra","Isyana","Warmadewa"],1,"Borobudur dibangun oleh Dinasti Syailendra sekitar abad ke-8 hingga ke-9 di Jawa Tengah."],
+["Sumpah Palapa untuk menyatukan Nusantara diucapkan oleh…",["Hayam Wuruk","Raden Wijaya","Gajah Mada","Mpu Prapanca"],2,"Gajah Mada, Mahapatih Majapahit, bersumpah tidak akan memakan palapa sebelum Nusantara bersatu."],
+["Kerajaan Islam pertama di Indonesia berdiri di Aceh, yaitu…",["Demak","Samudera Pasai","Ternate","Banten"],1,"Samudera Pasai (abad ke-13) tercatat sebagai kerajaan Islam pertama di Nusantara."]]},
+{id:"jajah",ic:"⚔️",name:"Era Penjajahan dan Perlawanan",desc:"VOC hingga kebangkitan nasional",qs:[
+["VOC, kongsi dagang Belanda, didirikan pada tahun…",["1596","1602","1799","1830"],1,"VOC berdiri tahun 1602 dan mendapat hak monopoli dagang di Asia."],
+["Perang Diponegoro (1825 hingga 1830) juga dikenal sebagai…",["Perang Padri","Perang Aceh","Perang Jawa","Perang Banjar"],2,"Perang Jawa melawan Belanda dipimpin Pangeran Diponegoro dan menguras kas Hindia Belanda."],
+["Sistem Tanam Paksa (Cultuurstelsel) diterapkan oleh Gubernur Jenderal…",["Daendels","Raffles","Van den Bosch","Van Heutsz"],2,"Johannes van den Bosch menerapkannya mulai 1830 untuk menutup kas negara Belanda."],
+["Organisasi pergerakan nasional pertama, berdiri 20 Mei 1908, adalah…",["Sarekat Islam","Indische Partij","Budi Utomo","PNI"],2,"Budi Utomo berdiri 20 Mei 1908, tanggal yang kini diperingati sebagai Hari Kebangkitan Nasional."]]},
+{id:"merdeka",ic:"🇮🇩",name:"Era Kemerdekaan",desc:"Sumpah Pemuda hingga pengakuan kedaulatan",qs:[
+["Sumpah Pemuda diikrarkan pada tanggal…",["20 Mei 1908","28 Oktober 1928","17 Agustus 1945","10 November 1945"],1,"Kongres Pemuda II pada 28 Oktober 1928 melahirkan satu nusa, satu bangsa, satu bahasa."],
+["Naskah Proklamasi hasil tulisan tangan Soekarno diketik oleh…",["Sayuti Melik","Ahmad Soebardjo","Fatmawati","Sukarni"],0,"Sayuti Melik mengetik naskah proklamasi dengan beberapa perubahan kecil."],
+["Pertempuran besar yang diperingati sebagai Hari Pahlawan terjadi di…",["Bandung","Semarang","Surabaya","Ambarawa"],2,"Pertempuran Surabaya 10 November 1945 melawan pasukan Sekutu menjadi simbol keberanian rakyat."],
+["Konferensi Meja Bundar (1949) yang menghasilkan pengakuan kedaulatan diadakan di…",["Jakarta","Den Haag","Linggarjati","Renville"],1,"KMB di Den Haag, Belanda, berujung pengakuan kedaulatan Indonesia pada 27 Desember 1949."]]}
+];
+var $=function(i){return document.getElementById(i)};
+var LET=["A","B","C","D"];
+var era,qs,idx,score,locked,right;
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+function show(id){document.querySelectorAll(".screen").forEach(function(s){s.classList.toggle("on",s.id===id)});window.scrollTo(0,0)}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function buildMenu(){
+  var h="";
+  ERAS.forEach(function(e,i){var b=store("best_"+e.id);h+='<button class="era" data-i="'+i+'"><span class="ic">'+e.ic+'</span><div><b>'+e.name+'</b><span>'+e.desc+'</span></div>'+(b?'<span class="best">🏅 '+b+'</span>':'')+'</button>'});
+  $("eras").innerHTML=h;
+}
+function start(i){
+  era=ERAS[i];
+  qs=shuffle(era.qs).map(function(q){var o=q[1].map(function(t,k){return{t:t,c:k===q[2]}});return{q:q[0],o:shuffle(o),x:q[3]}});
+  idx=0;score=0;right=0;show("quiz");render();
+}
+function render(){
+  var q=qs[idx];locked=false;
+  $("etag").textContent=era.ic+" "+era.name;
+  $("qtext").textContent=q.q;
+  $("count").textContent=(idx+1)+"/"+qs.length;
+  $("pts").textContent="⭐ "+score;
+  $("prog").style.width=(idx/qs.length*100)+"%";
+  $("fb").className="fb";$("next").hidden=true;
+  var h="";q.o.forEach(function(o,k){h+='<button class="opt" data-k="'+k+'"><span class="k">'+LET[k]+'</span><span></span></button>'});
+  $("opts").innerHTML=h;
+  var sp=$("opts").querySelectorAll(".opt span:last-child");q.o.forEach(function(o,k){sp[k].textContent=o.t});
+}
+function answer(k){
+  if(locked)return;locked=true;
+  var q=qs[idx],btns=$("opts").querySelectorAll(".opt"),good=q.o[k].c;
+  btns.forEach(function(b,i){b.disabled=true;if(q.o[i].c)b.classList.add("ok")});
+  if(good){score+=25;right++}else btns[k].classList.add("bad");
+  $("pts").textContent="⭐ "+score;
+  var f=$("fb");f.textContent=(good?"✅ Benar! ":"❌ Belum tepat. ")+q.x;f.className="fb on";
+  $("prog").style.width=((idx+1)/qs.length*100)+"%";
+  var n=$("next");n.hidden=false;n.textContent=idx===qs.length-1?"Lihat Hasil":"Lanjut →";n.focus({preventScroll:true});
+}
+function finish(){
+  var best=parseInt(store("best_"+era.id)||"0",10);
+  if(score>best)store("best_"+era.id,String(score));
+  var r=score===100?["Pahlawan Nusantara","🏆","Sempurna! Kamu menguasai era ini."]:score>=75?["Penjelajah Ulung","🧭","Hebat! Tinggal sedikit lagi menuju sempurna."]:score>=50?["Penjelajah Muda","🗺️","Lumayan! Baca penjelasan lalu coba lagi."]:["Calon Penjelajah","📜","Jangan menyerah, setiap penjelajah mulai dari nol."];
+  $("rscore").textContent=score;$("rrank").textContent=r[0];$("rem").textContent=r[1];
+  $("rmsg").textContent=right+" dari "+qs.length+" benar. "+r[2];
+  show("result");
+}
+$("start").onclick=function(){buildMenu();show("menu")};
+document.querySelectorAll("[data-go]").forEach(function(b){b.onclick=function(){show(b.dataset.go)}});
+$("eras").onclick=function(e){var b=e.target.closest(".era");if(b)start(+b.dataset.i)};
+$("aboutBtn").onclick=function(){var a=$("about");a.hidden=!a.hidden};
+$("opts").onclick=function(e){var b=e.target.closest(".opt");if(b)answer(+b.dataset.k)};
+$("next").onclick=function(){idx++;idx<qs.length?render():finish()};
+$("quit").onclick=function(){buildMenu();show("menu")};
+$("again").onclick=function(){start(ERAS.indexOf(era))};
+$("tomenu").onclick=function(){buildMenu();show("menu")};
+document.addEventListener("keydown",function(e){
+  if(!$("quiz").classList.contains("on"))return;
+  var k=LET.indexOf(e.key.toUpperCase());
+  if(k>-1&&k<4&&!locked)answer(k);
+  else if((e.key==="Enter"||e.key===" ")&&locked&&document.activeElement!==$("next")){e.preventDefault();$("next").click()}
+});
+})();
+</script>
+</body>
+</html>
